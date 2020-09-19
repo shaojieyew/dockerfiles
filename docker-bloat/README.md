@@ -1,5 +1,6 @@
-# dockerfiles
+# single node cluster for development
 
+Nifi, Spark, Yarn, HDFS, ES Kafka
 
 1. copy initial_vol to a new directory, eg. D:\DockerVol\bigdata\vol
 2. build docker image, run below cmd at the folder where dockerfile is
