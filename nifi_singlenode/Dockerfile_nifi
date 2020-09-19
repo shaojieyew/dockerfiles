@@ -1,0 +1,23 @@
+FROM ubuntu:16.04
+USER root
+RUN apt-get update && apt-get -y dist-upgrade && apt-get install -y openssh-server default-jdk wget scala sudo
+RUN apt-get -y update
+RUN apt-get -y install zip 
+RUN apt-get -y install vim
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
+RUN ssh-keygen -t rsa -f $HOME/.ssh/id_rsa -P "" \
+    && cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
+
+WORKDIR /opt
+
+RUN wget -O nifi.tar.gz -q https://archive.apache.org/dist/nifi/1.9.2/nifi-1.9.2-bin.tar.gz
+RUN tar xfz nifi.tar.gz --one-top-level=nifi --strip-components 1
+RUN rm nifi.tar.gz
+
+ENV NIFI_HOME=/opt/nifi
+
+EXPOSE 8080
+
+ENTRYPOINT $NIFI_HOME/bin/nifi.sh start; bash
+

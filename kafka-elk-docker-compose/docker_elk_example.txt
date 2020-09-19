@@ -1,0 +1,6 @@
+docker network create crawler-network --driver bridge
+docker run -d --name elasticsearch-server -p 9200:9200 -p 9300:9300 --network crawler-network  -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.6.1
+docker run -d --name kibana-server  -p 5601:5601 --network crawler-network --link elasticsearch-server:elasticsearch docker.elastic.co/kibana/kibana:7.6.1
+docker run -d --name zookeeper-server    -p 2181:2181 --network crawler-network   -e ALLOW_ANONYMOUS_LOGIN=yes     bitnami/zookeeper:latest
+docker run -d --name kafka-server   -p 9092:9092     -e ALLOW_PLAINTEXT_LISTENER=yes   -e KAFKA_CFG_ZOOKEEPER_CONNECT=172.17.0.4:2181     bitnami/kafka:latest
+

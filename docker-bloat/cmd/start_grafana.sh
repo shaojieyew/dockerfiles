@@ -1,0 +1,1 @@
+nohup $GRAFANA_HOME/bin/grafana-server &
