@@ -4,6 +4,7 @@ RUN apt-get update && apt-get -y dist-upgrade && apt-get install -y openssh-serv
 RUN apt-get -y update
 RUN apt-get -y install zip 
 RUN apt-get -y install vim
+RUN apt-get -y install build-essential
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 RUN ssh-keygen -t rsa -f $HOME/.ssh/id_rsa -P "" \
@@ -63,6 +64,15 @@ RUN tar xvf grafana-7.1.5.linux-amd64.tar.gz
 RUN rm grafana-7.1.5.linux-amd64.tar.gz
 RUN mv grafana-7.1.5 grafana
 
+RUN wget -O redis.tar.gz -q http://download.redis.io/redis-stable.tar.gz 
+RUN tar xfz redis.tar.gz --one-top-level=redis --strip-components 1
+RUN rm redis.tar.gz
+WORKDIR /opt/redis
+RUN sudo make 
+RUN sudo make install
+
+WORKDIR /opt
+
 ENV HADOOP_HOME=/opt/hadoop
 ENV SPARK_HOME=/opt/spark
 ENV NIFI_HOME=/opt/nifi
@@ -73,6 +83,7 @@ ENV ES_HOME=/opt/elasticsearch
 ENV KIBANA_HOME=/opt/kibana
 ENV PROMETHEUS_HOME=/opt/prometheus
 ENV GRAFANA_HOME=/opt/grafana
+ENV REDIS_HOME=/opt/redis
 
 COPY config/ /tmp/
 
@@ -104,9 +115,13 @@ EXPOSE 8081 8443 10000 8000
 EXPOSE 9092 9093
 EXPOSE 9200 9300 5601
 EXPOSE 9090 3000
+EXPOSE 6379
+
+COPY README.md /opt/README.md
 
 ENTRYPOINT sudo service ssh start; bash
 
+#redis-server $REDIS_HOME/redis.conf
 #sudo $HADOOP_HOME/sbin/start-dfs.sh
 #sudo $HADOOP_HOME/sbin/start-yarn.sh
 #$NIFI_HOME/bin/nifi.sh start

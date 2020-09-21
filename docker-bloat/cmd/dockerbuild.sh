@@ -1,1 +1,0 @@
-docker build -t dev/bigdata:0.1 .
