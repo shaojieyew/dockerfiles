@@ -5,4 +5,22 @@
 		<name>dfs.replication</name>
 		<value>1</value>
 	</property>
+	<property>
+    <name>dfs.data.dir</name>
+    <value>file:///usr/local/hadoop/hdfs/datanode</value> 
+    <final>true</final> 
+    </property> 
+    <property> 
+    <name>dfs.name.dir</name>
+    <value>file:///usr/local/hadoop/hdfs/namenode</value> 
+    <final>true</final> 
+</property>
+    <property>
+        <name>dfs.client.use.datanode.hostname</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>dfs.datanode.use.datanode.hostname</name>
+        <value>true</value>
+    </property>
 </configuration>

@@ -26,5 +26,13 @@
     <value>false</value>
 </property>
 
+<property>
+ <name>yarn.log-aggregation-enable</name>
+ <value>true</value>
+</property>
+<property>
+ <name>yarn.log.server.url</name>
+ <value>0.0.0.0</value>
+</property>
 
 </configuration>
